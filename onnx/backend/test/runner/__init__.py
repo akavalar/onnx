@@ -260,7 +260,7 @@ class Runner(object):
         # never loaded if the test skipped
         model_marker = [None]  # type: List[Optional[Union[ModelProto, NodeProto]]]
 
-        def run(test_self, device):  # type: (Any, Text) -> None
+        def run(test_self, device, modeltype="bytes"):  # type: (Any, Text, Text) -> None
             if model_test.model_dir is None:
                 model_dir = self.prepare_model_data(model_test)
             else:
@@ -272,7 +272,7 @@ class Runner(object):
                and callable(self.backend.is_compatible) \
                and not self.backend.is_compatible(model):
                 raise unittest.SkipTest('Not compatible with backend')
-            prepared_model = self.backend.prepare(model, device)
+            prepared_model = self.backend.prepare(model, modeltype, device)
             assert prepared_model is not None
 
             # TODO after converting all npz files to protobuf, we can delete this.
